@@ -40,7 +40,7 @@ for side in ["left", "right"]:
                             matfolder = 'Metal_' + filemat1 + '/'
                             audiofile = 'roughness_' + audio + '.wav'
 
-                            outputname = 'output/' + side + "_vis_" +  m   + '_audio_' + sound_label[i] + '_mat_' + filemat1 + '_' + str(vid_count) + '_.mp4'
+                            outputname = 'output2/' + side + "_vis_" +  m   + '_audio_' + sound_label[i] + '_mat_' + filemat1 + '_' + str(vid_count) + '_.mp4'
                             inputvid = m + '_' + str(vid_count).zfill(3) + '.mp4'
                             cmd = 'ffmpeg -i movies/' + inputvid + ' -i sounds/scraping_sounds/' + matfolder + audiofile + ' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 ' + outputname
                             subprocess.call(cmd, shell=True)                                     # "Muxing Done
