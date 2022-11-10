@@ -19,8 +19,8 @@ view_dict = {0:'forward', 1:'backward'}
 
 
 
-angles = ['flat', '15','25','35']
-angle_type = angles[0]
+angles = ['35','25','15', 'flat']
+angles_dict = {'short':35,'medium' : 25, 'long': 15}
 class RoughnessExpStimuliGen(object):
     def __init__(self):
         """
@@ -54,14 +54,15 @@ class RoughnessExpStimuliGen(object):
         rand_view2 = np.random.randint(2, size=15)
         print(rand_view)
         
-        for m in self.movie_speed:
+        for im, m in enumerate(self.movie_speed):
             print(m)
-            for m2 in self.movie_speed:
+            for im2, m2 in enumerate(self.movie_speed):
                 print(m2)
                 rand_vid = rand_vids[count]
                 print(rand_view[count])
                 # rand_viewf = view_dict[rand_view[count]]
                 rand_viewf = view_dict[0]
+                angle_type = angles[im]
                 inputvid = m + '_' + angle_type + '_' + rand_viewf + '_' + str(rand_vid).zfill(3) + '.mp4'
                 outputname = CONTROL_PATH + 'control_trials/left_visual_' + m + '_' + angle_type + '_' + rand_viewf + '_' + str(rand_vid).zfill(3) + '_music.mp4'
                 
@@ -72,6 +73,7 @@ class RoughnessExpStimuliGen(object):
                 rand_vid2 = rand_vids2[count]
                 # rand_view2f = view_dict[rand_view2[count]]
                 rand_view2f = view_dict[0]
+                angle_type = angles[im2]
                 inputvid = m2 + '_' + angle_type + '_' + rand_view2f + '_' + str(rand_vid2).zfill(3) + '.mp4'
                 outputname2 = CONTROL_PATH + 'control_trials/right_visual_' + m2 + '_' + angle_type + '_' + rand_view2f + '_' + str(rand_vid2).zfill(3) + '_music.mp4'
 
@@ -186,6 +188,7 @@ class RoughnessExpStimuliGen(object):
             audio = self.sound_speed[audio_label]
             matfolder = 'Metal_' + filemat1 + '/'
             audiofile = 'roughness_' + audio + '.wav'
+            angle_type = str(angles_dict[m])
             inputvid = m + '_' + angle_type + '_' + rand_viewf + '_' + str(rand_vid).zfill(3) + '.mp4'
             outputname =  stim1_name + '.mp4'
             cmd = 'ffmpeg -i movies/' + inputvid + ' -i sounds/scraping_sounds/' + matfolder + audiofile + ' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 ' + outputname
@@ -204,6 +207,7 @@ class RoughnessExpStimuliGen(object):
             audio = self.sound_speed[audio_label]
             matfolder = 'Metal_' + filemat1 + '/'
             audiofile = 'roughness_' + audio + '.wav'
+            angle_type = str(angles_dict[m])
             inputvid = m + '_' + angle_type + '_' + rand_viewf + '_' + str(rand_vid).zfill(3) + '.mp4'
             outputname = stim1_name + '.mp4'
             cmd = 'ffmpeg -i movies/' + inputvid + ' -i sounds/scraping_sounds/' + matfolder + audiofile + ' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 ' + outputname
