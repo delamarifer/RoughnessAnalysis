@@ -60,21 +60,23 @@ class RoughnessExpStimuliGen(object):
                 print(m2)
                 rand_vid = rand_vids[count]
                 print(rand_view[count])
-                rand_viewf = view_dict[rand_view[count]]
+                # rand_viewf = view_dict[rand_view[count]]
+                rand_viewf = view_dict[0]
                 inputvid = m + '_' + angle_type + '_' + rand_viewf + '_' + str(rand_vid).zfill(3) + '.mp4'
                 outputname = CONTROL_PATH + 'control_trials/left_visual_' + m + '_' + angle_type + '_' + rand_viewf + '_' + str(rand_vid).zfill(3) + '_music.mp4'
                 
-                # cmd = 'ffmpeg -i movies/' + inputvid + ' -i ' + audiofile + ' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 ' + outputname
-                # subprocess.call(cmd, shell=True)                                     # "Muxing Done
+                cmd = 'ffmpeg -i movies/' + inputvid + ' -i ' + audiofile + ' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 ' + outputname
+                subprocess.call(cmd, shell=True)                                     # "Muxing Done
                 print('Muxing Done')
 
                 rand_vid2 = rand_vids2[count]
-                rand_view2f = view_dict[rand_view2[count]]
+                # rand_view2f = view_dict[rand_view2[count]]
+                rand_view2f = view_dict[0]
                 inputvid = m2 + '_' + angle_type + '_' + rand_view2f + '_' + str(rand_vid2).zfill(3) + '.mp4'
                 outputname2 = CONTROL_PATH + 'control_trials/right_visual_' + m2 + '_' + angle_type + '_' + rand_view2f + '_' + str(rand_vid2).zfill(3) + '_music.mp4'
 
-                # cmd = 'ffmpeg -i movies/' + inputvid + ' -i ' + audiofile + ' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 ' + outputname2
-                # subprocess.call(cmd, shell=True)                                     # "Muxing Done
+                cmd = 'ffmpeg -i movies/' + inputvid + ' -i ' + audiofile + ' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 ' + outputname2
+                subprocess.call(cmd, shell=True)                                     # "Muxing Done
                 print('Muxing Done')
 
 
@@ -103,48 +105,50 @@ class RoughnessExpStimuliGen(object):
         """
         stimuli_count = 0 
         sub_from = 15
-        # for r in range(6):
-        random_rooms = []
-        for i in range(11):
-            random_rooms += random.sample(range(1,16), 15)
+        for r in range(6):
+            random_rooms = []
+            for i in range(11):
+                random_rooms += random.sample(range(1,16), 15)
 
-        random_materials = []
-        for i in range(54):
-            random_materials += random.sample([1,3,5], 3)
-        for m in self.movie_speed: # left
-            for i, audio in enumerate(self.sound_label):  # left
-                for m2 in self.movie_speed: # right
-                    for audio2 in self.sound_label: # right
-                        stim_dict = {} 
-                        rand_viewf = view_dict[np.random.randint(2)]
-                        stim1 = "left_" + rand_viewf + "_vis_" + m + "_audio_" + audio + "_mat_" + str(random_materials[stimuli_count]) + "_" + str(random_rooms[stimuli_count])
-                        stimuli_count += 1
-                        stim_dict['stimulus'] = ['output/' + stim1]
-                        stim_dict['stim_mat'] = random_materials[stimuli_count]
-                        stim_dict['stim_room'] = random_materials[stimuli_count]
+            random_materials = []
+            for i in range(54):
+                random_materials += random.sample([1,3,5], 3)
+            for m in self.movie_speed: # left
+                for i, audio in enumerate(self.sound_label):  # left
+                    for m2 in self.movie_speed: # right
+                        for audio2 in self.sound_label: # right
+                            stim_dict = {} 
+                            # rand_viewf = view_dict[np.random.randint(2)]
+                            rand_viewf = view_dict[0]
+                            stim1 = "left_" + rand_viewf + "_vis_" + m + "_audio_" + audio + "_mat_" + str(random_materials[stimuli_count]) + "_" + str(random_rooms[stimuli_count])
+                            stimuli_count += 1
+                            stim_dict['stimulus'] = ['output/' + stim1]
+                            stim_dict['stim_mat'] = random_materials[stimuli_count]
+                            stim_dict['stim_room'] = random_materials[stimuli_count]
 
 
-                        rand_viewf2 = view_dict[np.random.randint(2)]
-                        stim2 = "right_" + rand_viewf2 + "_vis_" + m2 + "_audio_" + audio2 + "_mat_" + str(random_materials[sub_from-stimuli_count]) + "_" +  str(random_rooms[sub_from-stimuli_count])
-                        stim_dict['stimulus2'] = ['output/' + stim2]
-                        stim_dict['stim2_mat'] = random_materials[sub_from-stimuli_count]
-                        stim_dict['stim2_room'] = random_rooms[sub_from-stimuli_count]
+                            # rand_viewf2 = view_dict[np.random.randint(2)]
+                            rand_viewf2 = view_dict[0]
+                            stim2 = "right_" + rand_viewf2 + "_vis_" + m2 + "_audio_" + audio2 + "_mat_" + str(random_materials[sub_from-stimuli_count]) + "_" +  str(random_rooms[sub_from-stimuli_count])
+                            stim_dict['stimulus2'] = ['output/' + stim2]
+                            stim_dict['stim2_mat'] = random_materials[sub_from-stimuli_count]
+                            stim_dict['stim2_room'] = random_rooms[sub_from-stimuli_count]
 
-                        stim_dict["delta_vspeed"] = self.vis_speed_dict[m] - self.vis_speed_dict[m2]
-                        stim_dict["delta_aspeed"] = self.speed_dict[audio] - self.speed_dict[audio2]
-                        # print(stimuli_count)
-                        stimuli_count += 1
-                        if stimuli_count == 162:
-                            stimuli_count = 0
-                        
+                            stim_dict["delta_vspeed"] = self.vis_speed_dict[m] - self.vis_speed_dict[m2]
+                            stim_dict["delta_aspeed"] = self.speed_dict[audio] - self.speed_dict[audio2]
+                            # print(stimuli_count)
+                            stimuli_count += 1
+                            if stimuli_count == 162:
+                                stimuli_count = 0
+                            
 
-                        data.append(stim_dict)
-        df = pd.DataFrame.from_dict(data)
+                            data.append(stim_dict)
+            df = pd.DataFrame.from_dict(data)
         # print(df)
-        # balanced = df.groupby(['delta_aspeed','delta_vspeed']).apply(self.sampling_k_elements).reset_index(drop=True)
-        return df
+        balanced = df.groupby(['delta_aspeed','delta_vspeed']).apply(self.sampling_k_elements).reset_index(drop=True)
+        return balanced
 
-    def sampling_k_elements(self, group, k=4):
+    def sampling_k_elements(self, group, k=5):
         """
         This function is used to sample k elements from each group
         """
@@ -184,8 +188,8 @@ class RoughnessExpStimuliGen(object):
             audiofile = 'roughness_' + audio + '.wav'
             inputvid = m + '_' + angle_type + '_' + rand_viewf + '_' + str(rand_vid).zfill(3) + '.mp4'
             outputname =  stim1_name + '.mp4'
-            # cmd = 'ffmpeg -i movies/' + inputvid + ' -i sounds/scraping_sounds/' + matfolder + audiofile + ' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 ' + outputname
-            # subprocess.call(cmd, shell=True)                                     # "Muxing Done
+            cmd = 'ffmpeg -i movies/' + inputvid + ' -i sounds/scraping_sounds/' + matfolder + audiofile + ' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 ' + outputname
+            subprocess.call(cmd, shell=True)                                     # "Muxing Done
             print('Muxing Done')
 
 
@@ -202,8 +206,8 @@ class RoughnessExpStimuliGen(object):
             audiofile = 'roughness_' + audio + '.wav'
             inputvid = m + '_' + angle_type + '_' + rand_viewf + '_' + str(rand_vid).zfill(3) + '.mp4'
             outputname = stim1_name + '.mp4'
-            # cmd = 'ffmpeg -i movies/' + inputvid + ' -i sounds/scraping_sounds/' + matfolder + audiofile + ' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 ' + outputname
-            # subprocess.call(cmd, shell=True)                                     # "Muxing Done
+            cmd = 'ffmpeg -i movies/' + inputvid + ' -i sounds/scraping_sounds/' + matfolder + audiofile + ' -c:v copy -c:a aac -map 0:v:0 -map 1:a:0 ' + outputname
+            subprocess.call(cmd, shell=True)                                     # "Muxing Done
             print('Muxing Done')
 
         
@@ -213,7 +217,7 @@ class RoughnessExpStimuliGen(object):
         This function is used to generate the stimuli
         """
         self.df = self.generate_data(self.data)
-        # self.df = self.df.sample(frac=0.5).reset_index(drop=True)
+        self.df = self.df.groupby(['delta_vspeed','delta_aspeed']).sample(frac=0.4, random_state=2).reset_index(drop=True)
         self.make_trial_videos()
         self.df = pd.concat([self.df, self.add_control_trials()])
         # self.df = self.df.sample(frac=1).reset_index(drop=True)
@@ -221,6 +225,7 @@ class RoughnessExpStimuliGen(object):
         print(self.df.groupby(['delta_vspeed', 'delta_aspeed'])['stimulus'].count())
             # print(g.count())
         
+        print(len(self.df.stimulus.explode().unique()))
         
 
 

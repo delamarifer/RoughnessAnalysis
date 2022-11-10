@@ -90,7 +90,7 @@ class ProcessTrials:
         df_real = pd.DataFrame(self.real_trials)
         counts = df_real['subjectID'].value_counts()
 
-        df = df[~df['subjectID'].isin(counts[counts < 50].index)]
+        df = df[~df['subjectID'].isin(counts[counts < 45].index)]
         # get right answer out of list 
         df_trials = pd.DataFrame(self.filter_trials)
         df_trials.right_answer = [item[0] for item in df_trials.right_answer]
@@ -98,9 +98,10 @@ class ProcessTrials:
         df_trials['Diff'] = np.where( df_trials['response'] == df_trials['right_answer'] , 1, 0)
         # calculate accuracy per subject and remove those below 80% accuracy
         df_trials = pd.DataFrame({"accuracy": df_trials.groupby("subjectID")["Diff"].sum()}).reset_index()
-        df_failed = df_trials.where(df_trials['accuracy'] < 4).dropna()
+        df_failed = df_trials.where(df_trials['accuracy'] < 5).dropna()
         ind_drop = df[df['subjectID'].apply(lambda x: x in list(df_failed["subjectID"]))].index
         df = df.drop(ind_drop)
+
         
         return df
 
